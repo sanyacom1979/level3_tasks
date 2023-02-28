@@ -42,7 +42,7 @@ engine = create_engine(db_url)
 Session = sessionmaker(bind=engine)
 
 
-def get_users():
+def get_users() -> list:
     session = Session()
     users = session.query(Users).all()
     session.close()
