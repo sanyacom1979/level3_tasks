@@ -1,0 +1,101 @@
+Домашка №3
+
+Создание таблицы users.
+
+CREATE TABLE users (
+	id SERIAL PRIMARY KEY, mail VARCHAR UNIQUE, password VARCHAR, 
+	balance INT, registered_date DATE
+);
+
+Создание  таблицы payments.
+
+CREATE TABLE payments (
+	id SERIAL PRIMARY KEY, user_id INT NOT NULL, amount INT, 
+	date DATE, completed BOOL,
+	FOREIGN KEY (user_id)
+		REFERENCES users (id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+);
+
+Добавление пользователя, с проверкой на уникальность почты
+
+INSERT INTO users (mail, password, balance, registered_date)
+VALUES ('mymail@mail.ru', '12345!', 0, current_date);
+
+второй запрос дает ошибку, т.к такой e-mail уже существует:
+INSERT INTO users (mail, password, balance, registered_date)
+VALUES ('mymail@mail.ru', '12345!', 100, current_date); 
+SQL Error [23505]: ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности "users_mail_key"
+  Подробности: Ключ "(mail)=(mymail@mail.ru)" уже существует.
+
+еще пользователи
+
+INSERT INTO users (mail, password, balance, registered_date)
+VALUES ('mymail@yandex.ru', '77777&&', 0, current_date);
+
+и аналогично остальных....
+
+Добавление платежа (с привязкой к пользователю)
+
+DO $$
+DECLARE 
+	u_id INT; 
+	bal INT; 
+	amo INT;
+BEGIN
+	
+	u_id := (SELECT id FROM users WHERE mail = 'max_max@gmail.com');
+	bal := (SELECT balance FROM users WHERE mail = 'max_max@gmail.com');
+
+	INSERT INTO payments (user_id, amount, date, completed)
+	VALUES (u_id, 70, current_date, true);
+
+	amo := (SELECT amount FROM payments WHERE user_id = u_id ORDER BY id DESC LIMIT 1);
+
+	UPDATE users SET balance = bal + amo WHERE id = u_id;
+END $$;
+
+И далее несколько похожих запросов...
+
+Запросы к БД
+
+1. Список зарегистрированных пользователей
+
+SELECT * FROM users;
+
+2. Список зарегистрированных пользователей с положительным балансом
+
+SELECT * FROM users WHERE balance > 0;
+
+3. Список зарегистрированных пользователей за сегодня
+
+SELECT * FROM users WHERE registered_date = current_date;
+
+4. Список пользователей с пятью и более пополнениями
+
+SELECT mail FROM users
+JOIN payments ON users.id = payments.user_id
+GROUP BY mail
+HAVING COUNT(payments.user_id) >= 5;
+
+5. Список пользователей со всеми неудачными пополнениями
+SELECT * FROM users
+JOIN payments ON users.id = payments.user_id
+WHERE completed = false
+ORDER BY mail;
+
+6. Список пополнений с указанием пользователя
+SELECT * FROM users
+JOIN payments ON users.id = payments.user_id
+WHERE mail = 'max_max@gmail.com';
+
+7. Суммарнре количество успешных пополнений
+
+SELECT COUNT(*) FROM payments
+WHERE completed = true;
+
+8. Суммарнре количество неудачных пополнений
+
+SELECT COUNT(*) FROM payments
+WHERE completed = false;
