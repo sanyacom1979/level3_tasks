@@ -51,7 +51,8 @@ def height_tree(node, h_max=0, h_cur=0):
 
 
 if __name__ == "__main__":
-    data = [random.randint(0, 20) for _ in range(10)]
+    #data = [random.randint(0, 20) for _ in range(10)]
+    data = [12, 4, 8, 17, 8, 0, 16, 16, 5, 12]
  
     print(data)
  

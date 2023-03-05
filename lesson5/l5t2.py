@@ -1,3 +1,4 @@
+'''
 import random
 
 class Node():
@@ -63,3 +64,4 @@ if __name__ == "__main__":
     
     print(is_balanced(head))
 
+'''
