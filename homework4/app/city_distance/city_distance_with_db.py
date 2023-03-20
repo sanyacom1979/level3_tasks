@@ -1,5 +1,4 @@
 import math
-from fastapi import Depends
 from app.city_distance.read_matrix import read_matrix
 from app.dependencies import city_distance_dependency
 from app.services.city_services import ServiceCityDistance
