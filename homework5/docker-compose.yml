@@ -1,0 +1,10 @@
+version: "3"
+services:
+  web:
+    build: .
+    volumes:
+      - .:/calc_short_distance
+    ports:
+      - 8080:8080
+    environment:
+      - COMPOSE_TLS_VERSION = TLSv1_2
