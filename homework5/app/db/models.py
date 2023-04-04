@@ -9,8 +9,3 @@ class CityDistance(Base):
     city_from = Column(Integer, nullable=False)
     city_to = Column(Integer, nullable=False)
     distance = Column(Integer, nullable=False)
-
-    
-
-    
-

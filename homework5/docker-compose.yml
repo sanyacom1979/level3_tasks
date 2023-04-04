@@ -2,9 +2,21 @@ version: "3"
 services:
   web:
     build: .
+    command: bash -c "alembic init app/alembic && alembic -c app/alembic.ini upgrade head && python app/main.py"
     volumes:
-      - .:/calc_short_distance
+      - .:/app
     ports:
       - 8080:8080
+    
+  db:
+    image: postgres:14
     environment:
-      - COMPOSE_TLS_VERSION = TLSv1_2
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=my_city
+      - POSTGRES_HOST=localhost
+    ports:
+      - 5432:5433
+    
+    hostname: postgres
+

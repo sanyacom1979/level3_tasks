@@ -4,5 +4,3 @@ from app.db.models import CityDistance
 
 class DbCityDistances(DbBase):
     data_model = CityDistance
-
-

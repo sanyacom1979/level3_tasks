@@ -6,6 +6,8 @@ from meteo_service.config import Config
 from meteo_service.integrations.open_meteo_api import OpenMeteApi, Probe
 
 
+
+
 @pytest.fixture
 def meteo_api_response() -> str:
     res = {"latitude": 59.9293, "longitude": 30.317093, "generationtime_ms": 2.460002899169922,
