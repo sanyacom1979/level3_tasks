@@ -49,7 +49,7 @@ def get_user(user_id: int,
 
 
 @router.post("/users")
-def get_user(user_item: BodyToAddUser, 
+def add_user(user_item: BodyToAddUser, 
     add_user_service: AddUser=Depends(add_user_dependency),
 ) -> None:
     
