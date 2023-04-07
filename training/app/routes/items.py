@@ -41,7 +41,6 @@ class BodyToAddUser(BaseModel):
 @router.get("/users/{user_id}", response_model=UserResponse)
 def get_user(user_id: int, 
     get_user_service: GetUser=Depends(get_user_dependency),
-    my_header: Union[str, None]=Header(default=None)
 ) -> UserResponse:
     
     if get_user_service(user_id) is None:

@@ -3,9 +3,10 @@ from fastapi import Depends
 from app.db.db_user import DbUsers
 from app.services.user_service import GetUser
 from app.services.user_service import AddUser
+from app.db.base import get_session
 
 def db_dependency() -> DbUsers: 
-	return DbUsers()
+	return DbUsers(get_session())
 
 
 def get_user_dependency(

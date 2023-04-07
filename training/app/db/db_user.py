@@ -5,3 +5,4 @@ from app.db.models import User
 class DbUsers(DbBase):
     data_model = User
 
+
