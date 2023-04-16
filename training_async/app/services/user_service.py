@@ -7,7 +7,7 @@ class GetUser():
 
 
 	def __call__(self, session, user_id):
-		return self.db_.get(session, {"id" : user_id})
+		return self.db_.get(session, user_id)
 
 
 class AddUser():

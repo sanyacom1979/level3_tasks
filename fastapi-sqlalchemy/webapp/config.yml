@@ -1,0 +1,2 @@
+db:
+  url: "postgresql://admin:admin@localhost:5432/my_db"

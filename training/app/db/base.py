@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
-from contextlib import contextmanager
+from contextlib import contextmanager, AbstractContextManager
+from typing import Callable
 from config import config
 
 db_url = f"postgresql://{config.login}:{config.password}@{config.host}:{config.port}/{config.database}"
@@ -13,7 +14,7 @@ class Base(DeclarativeBase):
 
 
 @contextmanager
-def get_session():
+def get_session() -> Session:
     session = Session()
     yield session
     session.close()

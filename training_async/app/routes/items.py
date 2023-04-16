@@ -10,7 +10,7 @@ from app.dependencies import add_user_dependency
 from app.services.user_service import GetUser
 from app.services.user_service import AddUser
 
-from app.db.base import get_session
+from app.db.base import async_session
 
 
 #from app.db.db_user import db_users
@@ -41,26 +41,29 @@ class BodyToAddUser(BaseModel):
 
 
 @router.get("/users/{user_id}", response_model=UserResponse)
-def get_user(user_id: int, 
+async def get_user(user_id: int, 
     get_user_service: GetUser=Depends(get_user_dependency),
 ) -> UserResponse:
-    with get_session() as session:
-        if get_user_service(session, user_id) is None:
-            raise HTTPException(status_code=404, detail=f"User not found")
-        return get_user_service(session, user_id)
+    async with async_session() as session:
+        async with session.begin():
+            if await get_user_service(session, user_id) is None:
+                raise HTTPException(status_code=404, detail=f"User not found")
+            return await get_user_service(session, user_id)
 
 
 @router.post("/users")
-def add_user(user_item: BodyToAddUser, 
+async def add_user(user_item: BodyToAddUser, 
     add_user_service: AddUser=Depends(add_user_dependency),
 ) -> None:
-    with get_session() as session:
-        add_user_service(
-            session,
-            {
-                "mail": user_item.mail,
-                "password": user_item.password,
-                "balance": user_item.balance,
-                "registered_date": user_item.registered_date
-            }
-        )
+    async with async_session() as session:
+        async with session.begin():
+            add_user_service(
+                session,
+                {
+                    "mail": user_item.mail,
+                    "password": user_item.password,
+                    "balance": user_item.balance,
+                    "registered_date": user_item.registered_date
+                }
+            )
+            await session.commit()
